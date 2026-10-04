@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Styles xmlns:sys="clr-namespace:System;assembly=System.Runtime" xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Avalonia.Luna.LunaTheme">
+  <Styles.Resources>
+    <!-- 原创渐变与矢量：不依赖 Windows 系统位图。 -->
+    <sys:Double x:Key="LunaControlHeight">28</sys:Double>
+    <Thickness x:Key="LunaInputPadding">6,3</Thickness>
+    <Thickness x:Key="LunaButtonPadding">14,3</Thickness>
+    <CornerRadius x:Key="ControlCornerRadius">3</CornerRadius>
+    <ControlTheme x:Key="LunaCaptionButton" TargetType="Button">
+      <Setter Property="Width" Value="23" />
+      <Setter Property="Height" Value="23" />
+      <Setter Property="Margin" Value="0,0,3,0" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="Background" Value="{DynamicResource LunaCaptionFill}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="BorderBrush" Value="{DynamicResource LunaCaptionBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="3" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="CaptionSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="3">
+            <ContentPresenter Content="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Border#CaptionSurface">
+        <Setter Property="BorderBrush" Value="White" />
+      </Style>
+      <Style Selector="^:pressed /template/ Border#CaptionSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaCaptionPressed}" />
+      </Style>
+      <Style Selector="^.luna-close:pressed /template/ Border#CaptionSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaClosePressed}" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.45" />
+      </Style>
+      <Style Selector="^:focus-visible">
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaCaptionFocus}" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaWindowDecorations" TargetType="WindowDrawnDecorations">
+      <Setter Property="DefaultTitleBarHeight" Value="31" />
+      <Setter Property="DefaultFrameThickness" Value="3" />
+      <Setter Property="DefaultShadowThickness" Value="0" />
+      <Setter Property="Template">
+        <WindowDrawnDecorationsTemplate>
+          <WindowDrawnDecorationsContent>
+            <WindowDrawnDecorationsContent.Underlay>
+              <Panel />
+            </WindowDrawnDecorationsContent.Underlay>
+            <WindowDrawnDecorationsContent.Overlay>
+              <Panel>
+                <Border Name="WindowFrame" Classes.inactive="{Binding !$parent[Window].IsActive}" BorderThickness="3" CornerRadius="8,8,0,0" BorderBrush="{DynamicResource LunaFrame}" IsHitTestVisible="False" />
+                <!-- 背景、边框和子元素都留出透明上角；最大化时取消圆角。 -->
+                <Border Name="TitleSurface" Classes.inactive="{Binding !$parent[Window].IsActive}" Background="{DynamicResource LunaTitle}" CornerRadius="8,8,0,0" ClipToBounds="True" WindowDecorationProperties.ElementRole="TitleBar" VerticalAlignment="Top" Height="{TemplateBinding TitleBarHeight}" IsVisible="{TemplateBinding HasTitleBar}">
+                  <Grid Name="PART_TitleBar">
+                    <TextBlock Name="WindowTitle" Text="{TemplateBinding Title}" Margin="10,0,93,0" Foreground="{DynamicResource LunaTitleText}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" IsHitTestVisible="False" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,3,0">
+                      <Button Name="PART_MinimizeButton" Classes="luna-caption" Theme="{StaticResource LunaCaptionButton}" WindowDecorationProperties.ElementRole="MinimizeButton" AutomationProperties.Name="最小化">
+                        <Path Data="M 1,10 L 10,10 L 10,12 L 1,12 Z" Fill="{DynamicResource LunaCaptionGlyph}" />
+                      </Button>
+                      <Button Name="PART_MaximizeButton" Classes="luna-caption" Theme="{StaticResource LunaCaptionButton}" WindowDecorationProperties.ElementRole="MaximizeButton" AutomationProperties.Name="最大化或还原">
+                        <Path Name="MaxGlyph" Data="M 1,1 L 12,1 L 12,12 L 1,12 Z M 3,4 L 3,10 L 10,10 L 10,4 Z" Fill="{DynamicResource LunaCaptionGlyph}" />
+                      </Button>
+                      <Button Name="PART_CloseButton" Classes="luna-caption luna-close" Theme="{StaticResource LunaCaptionButton}" Background="{DynamicResource LunaCloseFill}" WindowDecorationProperties.ElementRole="CloseButton" AutomationProperties.Name="关闭">
+                        <Path Data="M 2,2 L 12,12 M 12,2 L 2,12" Stroke="White" StrokeThickness="2" />
+                      </Button>
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </Panel>
+            </WindowDrawnDecorationsContent.Overlay>
+          </WindowDrawnDecorationsContent>
+        </WindowDrawnDecorationsTemplate>
+      </Setter>
+      <Style Selector="^:maximized /template/ Path#MaxGlyph">
+        <Setter Property="Data" Value="M 4,1 L 12,1 L 12,9 L 9,9 L 9,12 L 1,12 L 1,4 L 4,4 Z M 3,7 L 3,10 L 7,10 L 7,7 Z M 6,3 L 6,4 L 9,4 L 9,7 L 10,7 L 10,3 Z" />
+      </Style>
+      <Style Selector="^:not(:has-minimize) /template/ Button#PART_MinimizeButton">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^:not(:has-maximize) /template/ Button#PART_MaximizeButton">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^:maximized /template/ Border#TitleSurface, ^:maximized /template/ Border#WindowFrame">
+        <Setter Property="CornerRadius" Value="0" />
+      </Style>
+      <Style Selector="^:maximized /template/ Border#WindowFrame">
+        <Setter Property="BorderThickness" Value="0" />
+      </Style>
+      <Style Selector="^ /template/ Border#TitleSurface.inactive TextBlock#WindowTitle">
+        <Setter Property="Foreground" Value="{DynamicResource LunaInactiveTitleText}" />
+      </Style>
+      <Style Selector="^ /template/ Border#TitleSurface.inactive">
+        <Setter Property="Background" Value="{DynamicResource LunaInactiveTitle}" />
+      </Style>
+      <Style Selector="^ /template/ Border#TitleSurface.inactive Button">
+        <Setter Property="Opacity" Value="0.72" />
+      </Style>
+      <Style Selector="^ /template/ Border#WindowFrame.inactive">
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaInactiveFrame}" />
+      </Style>
+      <Style Selector="^:fullscreen /template/ Border#TitleSurface">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </ControlTheme>
+  </Styles.Resources>
+  <Style Selector="Window">
+    <Setter Property="Padding" Value="3,31,3,3" />
+    <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+    <Setter Property="TransparencyLevelHint" Value="Transparent" />
+    <Setter Property="TransparencyBackgroundFallback" Value="Transparent" />
+    <!-- 客户区不涂满标题栏背后的矩形；否则圆弧外仍会露出方角。 -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
+          <Border Background="{TemplateBinding Background}" Margin="0,31,0,0" IsHitTestVisible="False" />
+          <VisualLayerManager Name="PART_VisualLayerManager">
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </VisualLayerManager>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Setter Property="FontFamily" Value="Tahoma, Microsoft YaHei UI" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="WindowDecorationsTheme" Value="{StaticResource LunaWindowDecorations}" />
+    <Setter Property="WindowDecorations" Value="Full" />
+    <Setter Property="ExtendClientAreaToDecorationsHint" Value="True" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption)">
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Background" Value="{DynamicResource LunaButtonFill}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaButtonBorder}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="3" />
+    <Setter Property="Padding" Value="{StaticResource LunaButtonPadding}" />
+    <Setter Property="MinHeight" Value="{StaticResource LunaControlHeight}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="ButtonSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+          <Border Name="ButtonBevel" BorderBrush="White" BorderThickness="1" CornerRadius="2">
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Padding="{TemplateBinding Padding}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="Center" RecognizesAccessKey="True" />
+          </Border>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="Button:not(.luna-caption):pointerover /template/ Border#ButtonSurface">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBorder}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):pressed /template/ Border#ButtonSurface">
+    <Setter Property="Background" Value="{DynamicResource LunaButtonPressed}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):focus-visible /template/ Border#ButtonSurface">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):pointerover /template/ Border#ButtonBevel">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBevel}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):pressed /template/ Border#ButtonBevel">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaPressedBevel}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):focus-visible /template/ Border#ButtonBevel">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaFocusBevel}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):disabled">
+    <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="TextBox">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaInputBorder}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="MinHeight" Value="{StaticResource LunaControlHeight}" />
+    <Setter Property="Padding" Value="{StaticResource LunaInputPadding}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):pointerover /template/ ContentPresenter#PART_ContentPresenter, Button:not(.luna-caption):pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="TextBox:disabled /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaDisabledBorder}" />
+  </Style>
+  <Style Selector="Button:not(.luna-caption):disabled /template/ Border#ButtonSurface">
+    <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaDisabledBorder}" />
+  </Style>
+  <Style Selector="TextBox:disabled">
+    <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+    <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+  </Style>
+  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="TabControl">
+    <Setter Property="Background" Value="{DynamicResource LunaPaper}" />
+  </Style>
+  <Style Selector="TabItem">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Padding" Value="15,6" />
+    <Setter Property="Background" Value="{DynamicResource LunaButtonFill}" />
+  </Style>
+  <Style Selector="TabItem:selected">
+    <Setter Property="Background" Value="{DynamicResource LunaPaper}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBorder}" />
+    <Setter Property="BorderThickness" Value="1,3,1,0" />
+  </Style>
+  <Style Selector="ProgressBar">
+    <Setter Property="Foreground" Value="{DynamicResource LunaProgressFill}" />
+    <Setter Property="Background" Value="{DynamicResource LunaProgressTrack}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaInputBorder}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="2" />
+    <Setter Property="Height" Value="18" />
+    <Setter Property="Padding" Value="2" />
+  </Style>
+  <!-- 选框仍是标准 ToggleButton 派生控件，Space/分组/无障碍由框架负责。 -->
+  <Style Selector="CheckBox">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="7">
+          <Border Name="CheckSurface" Width="14" Height="14" VerticalAlignment="Center" BorderBrush="{DynamicResource LunaToggleBorder}" BorderThickness="1" Background="{DynamicResource LunaButtonFill}">
+            <Panel>
+              <Path Name="CheckMark" Data="M 2,6 L 5,9 L 10,2" Stroke="{DynamicResource LunaCheckMark}" StrokeThickness="2.5" IsVisible="False" />
+              <Border Name="MixedMark" Background="{DynamicResource LunaCheckMark}" Margin="3" IsVisible="False" />
+            </Panel>
+          </Border>
+          <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" VerticalAlignment="Center" RecognizesAccessKey="True" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="CheckBox:checked /template/ Path#CheckMark">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+  <Style Selector="CheckBox:indeterminate /template/ Border#MixedMark">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+  <Style Selector="CheckBox:pointerover /template/ Border#CheckSurface">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBorder}" />
+  </Style>
+  <Style Selector="CheckBox:pressed /template/ Border#CheckSurface">
+    <Setter Property="Background" Value="{DynamicResource LunaTogglePressed}" />
+  </Style>
+  <Style Selector="CheckBox:focus-visible /template/ Border#CheckSurface">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+  </Style>
+  <Style Selector="CheckBox:disabled">
+    <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+  </Style>
+  <Style Selector="RadioButton">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="7">
+          <Border Name="RadioSurface" Width="14" Height="14" VerticalAlignment="Center" BorderBrush="{DynamicResource LunaToggleBorder}" BorderThickness="1" CornerRadius="7" Background="{DynamicResource LunaButtonFill}">
+            <Ellipse Name="RadioDot" Fill="{DynamicResource LunaCheckMark}" Margin="3" IsVisible="False" />
+          </Border>
+          <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" VerticalAlignment="Center" RecognizesAccessKey="True" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="RadioButton:checked /template/ Ellipse#RadioDot">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+  <Style Selector="RadioButton:pointerover /template/ Border#RadioSurface">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBorder}" />
+  </Style>
+  <Style Selector="RadioButton:pressed /template/ Border#RadioSurface">
+    <Setter Property="Background" Value="{DynamicResource LunaTogglePressed}" />
+  </Style>
+  <Style Selector="RadioButton:focus-visible /template/ Border#RadioSurface">
+    <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+  </Style>
+  <Style Selector="RadioButton:disabled">
+    <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+  </Style>
+  <Style Selector="Window[WindowState=Maximized]">
+    <Setter Property="Padding" Value="0,31,0,0" />
+  </Style>
+  <StyleInclude Source="avares://Avalonia.Luna/LunaInputs.axaml" />
+  <StyleInclude Source="avares://Avalonia.Luna/LunaDesktop.axaml" />
+</Styles>

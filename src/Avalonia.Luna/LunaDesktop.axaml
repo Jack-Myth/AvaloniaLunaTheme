@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:conv="using:Avalonia.Controls.Converters">
+  <Styles.Resources>
+    <conv:PlatformKeyGestureConverter x:Key="LunaKeyGesture" />
+    <!-- PART 与 Popup 保留框架菜单的键盘导航、轻触关闭及子菜单定位。 -->
+    <ControlTheme x:Key="LunaMenuItem" TargetType="MenuItem">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="Black" />
+      <Setter Property="Padding" Value="3,3" />
+      <Setter Property="MinHeight" Value="24" />
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Border Name="MenuSurface" Background="{TemplateBinding Background}" MinHeight="{TemplateBinding MinHeight}" Padding="{TemplateBinding Padding}">
+              <Grid ColumnDefinitions="20,Auto,*,Auto,12">
+                <Panel VerticalAlignment="Center">
+                  <Path Name="MenuCheck" Data="M 3,7 L 6,10 L 13,3" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" IsVisible="False" />
+                  <Ellipse Name="MenuRadio" Width="6" Height="6" Fill="{TemplateBinding Foreground}" IsVisible="False" />
+                </Panel>
+                <ContentPresenter Name="MenuIcon" Grid.Column="1" Width="16" Margin="0,0,4,0" Content="{TemplateBinding Icon}" IsVisible="False" VerticalAlignment="Center" />
+                <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="2" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" RecognizesAccessKey="True" VerticalAlignment="Center" />
+                <TextBlock Name="MenuGesture" Grid.Column="3" Margin="22,0,8,0" Text="{TemplateBinding InputGesture, Converter={StaticResource LunaKeyGesture}}" VerticalAlignment="Center" />
+                <Path Name="MenuArrow" Grid.Column="4" Data="M 0,0 L 4,4 L 0,8 Z" Width="4" Height="8" Fill="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+              </Grid>
+            </Border>
+            <Popup Name="PART_Popup" IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}" Placement="RightEdgeAlignedTop" HorizontalOffset="-1" IsLightDismissEnabled="False" WindowManagerAddShadowHint="False">
+              <Border Background="{DynamicResource LunaPaper}" BorderBrush="{DynamicResource LunaPopupBorder}" BorderThickness="1" Padding="2" MinWidth="180" MaxHeight="360">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                  <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Grid.IsSharedSizeScope="True" />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:icon /template/ ContentPresenter#MenuIcon">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:empty /template/ Path#MenuArrow">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^:checked:toggle /template/ Path#MenuCheck">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:checked:radio /template/ Ellipse#MenuRadio">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:selected, ^:pointerover, ^:open">
+        <Setter Property="Background" Value="{DynamicResource LunaSelection}" />
+        <Setter Property="Foreground" Value="White" />
+      </Style>
+      <Style Selector="^:focus-visible">
+        <Setter Property="Background" Value="{DynamicResource LunaSelection}" />
+        <Setter Property="Foreground" Value="White" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+      <Style Selector="^:separator">
+        <Setter Property="MinHeight" Value="8" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Separator />
+          </ControlTemplate>
+        </Setter>
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaTopMenuItem" TargetType="MenuItem" BasedOn="{StaticResource LunaMenuItem}">
+      <Setter Property="Padding" Value="9,4" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Border Name="MenuSurface" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+              <ContentPresenter Name="PART_HeaderPresenter" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" RecognizesAccessKey="True" VerticalAlignment="Center" />
+            </Border>
+            <Popup Name="PART_Popup" IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}" Placement="BottomEdgeAlignedLeft" IsLightDismissEnabled="True" OverlayInputPassThroughElement="{Binding $parent[Menu]}" WindowManagerAddShadowHint="False">
+              <Border Background="{DynamicResource LunaPaper}" BorderBrush="{DynamicResource LunaPopupBorder}" BorderThickness="1" Padding="2" MinWidth="190" MaxHeight="360">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                  <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Grid.IsSharedSizeScope="True" />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaMenu" TargetType="Menu">
+      <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+      <Setter Property="Height" Value="28" />
+      <Setter Property="ItemContainerTheme" Value="{StaticResource LunaTopMenuItem}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaDivider}" BorderThickness="0,0,0,1">
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaContextMenu" TargetType="ContextMenu">
+      <Setter Property="Focusable" Value="True" />
+      <Setter Property="Background" Value="{DynamicResource LunaPaper}" />
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="MaxHeight" Value="360" />
+      <Setter Property="WindowManagerAddShadowHint" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaPopupBorder}" BorderThickness="1" Padding="{TemplateBinding Padding}" MinWidth="190">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Grid.IsSharedSizeScope="True" />
+            </ScrollViewer>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaToolTip" TargetType="ToolTip">
+      <Setter Property="Background" Value="{DynamicResource LunaToolTipSurface}" />
+      <Setter Property="Foreground" Value="Black" />
+      <Setter Property="Padding" Value="5,3" />
+      <Setter Property="MaxWidth" Value="300" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="TipSurface" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaPopupBorder}" BorderThickness="1" Padding="{TemplateBinding Padding}">
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" TextBlock.TextWrapping="Wrap" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaGroupBox" TargetType="GroupBox">
+      <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+      <Setter Property="Foreground" Value="Black" />
+      <Setter Property="Padding" Value="12,10,12,12" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Grid RowDefinitions="Auto,*">
+            <Border Grid.RowSpan="2" Margin="0,8,0,0" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaGroupBorder}" BorderThickness="1" CornerRadius="3">
+              <Border BorderBrush="White" BorderThickness="1" CornerRadius="2" />
+            </Border>
+            <Border Margin="9,0,0,0" Padding="4,0" Background="{TemplateBinding Background}" HorizontalAlignment="Left">
+              <ContentPresenter Name="PART_HeaderPresenter" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Foreground="{DynamicResource LunaHeading}" RecognizesAccessKey="True" />
+            </Border>
+            <ContentPresenter Name="PART_ContentPresenter" Grid.Row="1" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+      </Style>
+    </ControlTheme>
+    <!-- 树使用真实 ToggleButton 和 IsExpanded，叶子仍保留缩进占位。 -->
+    <ControlTheme x:Key="LunaTreeExpander" TargetType="ToggleButton">
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Width" Value="20" />
+      <Setter Property="Height" Value="22" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="TreePlusBox" Width="9" Height="9" Background="White" BorderBrush="{DynamicResource LunaTreeExpanderBorder}" BorderThickness="1">
+            <Panel>
+              <Path Data="M 1,3.5 L 6,3.5" Stroke="{DynamicResource LunaTreeExpanderInk}" StrokeThickness="1" />
+              <Path Name="TreePlusStem" Data="M 3.5,1 L 3.5,6" Stroke="{DynamicResource LunaTreeExpanderInk}" StrokeThickness="1" />
+            </Panel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:checked /template/ Path#TreePlusStem">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^:pointerover /template/ Border#TreePlusBox">
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaTreeItem" TargetType="TreeViewItem">
+      <Setter Property="MinHeight" Value="24" />
+      <Setter Property="Foreground" Value="Black" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <StackPanel>
+            <Grid Name="PART_Header" ColumnDefinitions="20,*" MinHeight="{TemplateBinding MinHeight}">
+              <ToggleButton Name="PART_ExpandCollapseChevron" Theme="{StaticResource LunaTreeExpander}" IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" />
+              <Border Name="TreeSelection" Grid.Column="1" Background="{TemplateBinding Background}" Padding="3,2" HorizontalAlignment="Left">
+                <Panel>
+                  <ContentPresenter Name="PART_HeaderPresenter" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" VerticalAlignment="Center" />
+                  <Rectangle Name="TreeFocus" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" StrokeDashArray="1,2" IsHitTestVisible="False" IsVisible="False" />
+                </Panel>
+              </Border>
+            </Grid>
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" IsVisible="{TemplateBinding IsExpanded}" Margin="18,0,0,0" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:empty /template/ ToggleButton#PART_ExpandCollapseChevron">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ Border#TreeSelection:pointerover">
+        <Setter Property="Background" Value="{DynamicResource LunaTreeHover}" />
+      </Style>
+      <Style Selector="^:selected">
+        <Setter Property="Background" Value="{DynamicResource LunaSelection}" />
+        <Setter Property="Foreground" Value="White" />
+      </Style>
+      <Style Selector="^:selected /template/ Border#TreeSelection:pointerover">
+        <Setter Property="Background" Value="{DynamicResource LunaSelection}" />
+      </Style>
+      <Style Selector="^:selected:focus-within /template/ Rectangle#TreeFocus">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaTree" TargetType="TreeView">
+      <Setter Property="Background" Value="White" />
+      <Setter Property="BorderBrush" Value="{DynamicResource LunaInputBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+            <ScrollViewer Name="PART_ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </ScrollViewer>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+  </Styles.Resources>
+  <Style Selector="Menu">
+    <Setter Property="Theme" Value="{StaticResource LunaMenu}" />
+  </Style>
+  <Style Selector="MenuItem">
+    <Setter Property="Theme" Value="{StaticResource LunaMenuItem}" />
+  </Style>
+  <Style Selector="Menu &gt; MenuItem">
+    <Setter Property="Theme" Value="{StaticResource LunaTopMenuItem}" />
+  </Style>
+  <Style Selector="ContextMenu">
+    <Setter Property="Theme" Value="{StaticResource LunaContextMenu}" />
+  </Style>
+  <Style Selector="ToolTip">
+    <Setter Property="Theme" Value="{StaticResource LunaToolTip}" />
+  </Style>
+  <Style Selector="GroupBox">
+    <Setter Property="Theme" Value="{StaticResource LunaGroupBox}" />
+  </Style>
+  <Style Selector="TreeView">
+    <Setter Property="Theme" Value="{StaticResource LunaTree}" />
+  </Style>
+  <Style Selector="TreeViewItem">
+    <Setter Property="Theme" Value="{StaticResource LunaTreeItem}" />
+  </Style>
+  <Style Selector="Separator">
+    <Setter Property="Margin" Value="4,3" />
+    <Setter Property="Height" Value="2" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border BorderBrush="{DynamicResource LunaSeparator}" BorderThickness="0,1,0,0" Background="White" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

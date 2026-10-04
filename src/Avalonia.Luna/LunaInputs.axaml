@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <!-- 这些模板只负责绘制；Popup、Track 和标准 PART 名称保留原生控件行为。 -->
+    <ControlTheme x:Key="LunaComboBox" TargetType="ComboBox">
+      <Setter Property="Padding" Value="{StaticResource LunaInputPadding}" />
+      <Setter Property="Background" Value="White" />
+      <Setter Property="BorderBrush" Value="{DynamicResource LunaInputBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="MinHeight" Value="{StaticResource LunaControlHeight}" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="MaxDropDownHeight" Value="240" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DataValidationErrors>
+            <Border Name="ComboSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+              <Grid ColumnDefinitions="*,23">
+                <TextBlock Name="Placeholder" Text="{TemplateBinding PlaceholderText}" Foreground="{DynamicResource LunaPlaceholder}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" IsHitTestVisible="False" IsVisible="{TemplateBinding SelectionBoxItem, Converter={x:Static ObjectConverters.IsNull}}" />
+                <ContentControl Name="ContentPresenter" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Margin="{TemplateBinding Padding}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" IsVisible="{TemplateBinding IsEditable, Converter={x:Static BoolConverters.Not}}" />
+                <TextBox Name="PART_EditableTextBox" Text="{TemplateBinding Text, Mode=TwoWay}" PlaceholderText="{TemplateBinding PlaceholderText}" Padding="{TemplateBinding Padding}" BorderThickness="0" Background="Transparent" IsVisible="{TemplateBinding IsEditable}" />
+                <Border Name="ComboArrow" Grid.Column="1" Margin="1" Background="{DynamicResource LunaInputFill}" BorderBrush="{DynamicResource LunaArrowBorder}" BorderThickness="1" CornerRadius="2">
+                  <Path Data="M 0,0 L 8,0 L 4,4 Z" Fill="{DynamicResource LunaArrowInk}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <Popup Name="PART_Popup" Placement="Bottom" PlacementTarget="ComboSurface" IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}" IsLightDismissEnabled="True" MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="{TemplateBinding MaxDropDownHeight}" WindowManagerAddShadowHint="False">
+                  <Border Background="White" BorderBrush="{DynamicResource LunaInputBorder}" BorderThickness="1" Padding="1">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                      <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </ScrollViewer>
+                  </Border>
+                </Popup>
+              </Grid>
+            </Border>
+          </DataValidationErrors>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Border#ComboArrow">
+        <Setter Property="Background" Value="{DynamicResource LunaInputHotFill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBorder}" />
+      </Style>
+      <Style Selector="^:pressed /template/ Border#ComboArrow, ^:dropdownopen /template/ Border#ComboArrow">
+        <Setter Property="Background" Value="{DynamicResource LunaInputPressed}" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Border#ComboSurface">
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource LunaDisabledText}" />
+        <Setter Property="Background" Value="{DynamicResource LunaSurface}" />
+      </Style>
+      <Style Selector="^:error /template/ Border#ComboSurface">
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaValidationError}" />
+      </Style>
+      <Style Selector="^[IsEditable=true] /template/ TextBlock#Placeholder">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^:disabled /template/ Border#ComboArrow">
+        <Setter Property="Background" Value="{DynamicResource LunaDisabledArrow}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaDisabledBorder}" />
+      </Style>
+      <Style Selector="^[IsEditable=true]">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="Local" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaComboBoxItem" TargetType="ComboBoxItem">
+      <!-- null 背景会让空白处穿透；透明背景使整行参与命中，文字无需拉伸。 -->
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="Padding" Value="5,3" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="Center" />
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:selected, ^:pointerover">
+        <Setter Property="Background" Value="{DynamicResource LunaSelection}" />
+        <Setter Property="Foreground" Value="White" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaTrackButton" TargetType="RepeatButton">
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="Transparent" />
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pressed /template/ Border">
+        <Setter Property="Background" Value="{DynamicResource LunaTrackPressed}" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaSliderThumb" TargetType="Thumb">
+      <Setter Property="Background" Value="{DynamicResource LunaInputFill}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Path Name="ThumbShape" Data="M 1,0.5 L 11,0.5 L 11,16 L 6,21 L 1,16 Z" Stretch="Fill" Fill="{TemplateBinding Background}" Stroke="{DynamicResource LunaThumbBorder}" StrokeThickness="1" />
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Path#ThumbShape">
+        <Setter Property="Fill" Value="{DynamicResource LunaInputHotFill}" />
+        <Setter Property="Stroke" Value="{DynamicResource LunaHotBorder}" />
+      </Style>
+      <Style Selector="^:pressed /template/ Path#ThumbShape">
+        <Setter Property="Fill" Value="{DynamicResource LunaInputPressed}" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaVerticalSliderThumb" TargetType="Thumb" BasedOn="{StaticResource LunaSliderThumb}">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Path Name="ThumbShape" Data="M 0.5,1 L 16,1 L 21,6 L 16,11 L 0.5,11 Z" Stretch="Fill" Fill="{TemplateBinding Background}" Stroke="{DynamicResource LunaThumbBorder}" StrokeThickness="1" />
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaSlider" TargetType="Slider">
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+      <Setter Property="MinHeight" Value="32" />
+      <Setter Property="MinWidth" Value="32" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DataValidationErrors>
+            <Grid Name="SliderSurface" Background="Transparent" RowDefinitions="6,22,6">
+              <Rectangle Name="FocusRing" Grid.RowSpan="3" Margin="0,1" Stroke="{DynamicResource LunaFocus}" StrokeThickness="1" StrokeDashArray="1,2" IsHitTestVisible="False" IsVisible="False" />
+              <Border Name="Groove" Grid.Row="1" Height="4" VerticalAlignment="Center" Background="{DynamicResource LunaInsetSurface}" BorderBrush="{DynamicResource LunaGrooveBorder}" BorderThickness="1" />
+              <TickBar Name="TopTicks" Placement="Top" Height="5" Fill="{DynamicResource LunaTick}" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" TickFrequency="{TemplateBinding TickFrequency}" Ticks="{TemplateBinding Ticks}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}" ReservedSpace="{Binding #PART_Track.Thumb.Bounds}" IsVisible="False" />
+              <TickBar Name="BottomTicks" Grid.Row="2" Placement="Bottom" Height="5" Fill="{DynamicResource LunaTick}" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" TickFrequency="{TemplateBinding TickFrequency}" Ticks="{TemplateBinding Ticks}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}" ReservedSpace="{Binding #PART_Track.Thumb.Bounds}" IsVisible="False" />
+              <Track Name="PART_Track" Grid.Row="1" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value, Mode=TwoWay}" Orientation="{TemplateBinding Orientation}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_DecreaseButton" Theme="{StaticResource LunaTrackButton}" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_IncreaseButton" Theme="{StaticResource LunaTrackButton}" />
+                </Track.IncreaseButton>
+                <Thumb Name="SliderThumb" Width="12" Height="22" Theme="{StaticResource LunaSliderThumb}" />
+              </Track>
+            </Grid>
+          </DataValidationErrors>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^[TickPlacement=TopLeft] /template/ TickBar#TopTicks, ^[TickPlacement=Outside] /template/ TickBar#TopTicks">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^[TickPlacement=BottomRight] /template/ TickBar#BottomTicks, ^[TickPlacement=Outside] /template/ TickBar#BottomTicks">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Rectangle#FocusRing">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Border#Groove">
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaFocus}" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+      <Style Selector="^:vertical">
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors>
+              <Grid Name="SliderSurface" Background="Transparent" ColumnDefinitions="6,22,6">
+                <Rectangle Name="FocusRing" Grid.ColumnSpan="3" Margin="1,0" Stroke="{DynamicResource LunaFocus}" StrokeThickness="1" StrokeDashArray="1,2" IsHitTestVisible="False" IsVisible="False" />
+                <Border Name="Groove" Width="4" Grid.Column="1" HorizontalAlignment="Center" Background="{DynamicResource LunaInsetSurface}" BorderBrush="{DynamicResource LunaGrooveBorder}" BorderThickness="1" />
+                <TickBar Name="LeftTicks" Placement="Left" Orientation="Vertical" Width="5" Fill="{DynamicResource LunaTick}" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" TickFrequency="{TemplateBinding TickFrequency}" Ticks="{TemplateBinding Ticks}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}" ReservedSpace="{Binding #PART_Track.Thumb.Bounds}" IsVisible="False" />
+                <TickBar Name="RightTicks" Grid.Column="2" Placement="Right" Orientation="Vertical" Width="5" Fill="{DynamicResource LunaTick}" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" TickFrequency="{TemplateBinding TickFrequency}" Ticks="{TemplateBinding Ticks}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}" ReservedSpace="{Binding #PART_Track.Thumb.Bounds}" IsVisible="False" />
+                <Track Name="PART_Track" Grid.Column="1" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value, Mode=TwoWay}" Orientation="Vertical" IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                  <Track.DecreaseButton>
+                    <RepeatButton Name="PART_DecreaseButton" Theme="{StaticResource LunaTrackButton}" />
+                  </Track.DecreaseButton>
+                  <Track.IncreaseButton>
+                    <RepeatButton Name="PART_IncreaseButton" Theme="{StaticResource LunaTrackButton}" />
+                  </Track.IncreaseButton>
+                  <Thumb Width="22" Height="12" Theme="{StaticResource LunaVerticalSliderThumb}" />
+                </Track>
+              </Grid>
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+      </Style>
+      <Style Selector="^[TickPlacement=TopLeft] /template/ TickBar#LeftTicks, ^[TickPlacement=Outside] /template/ TickBar#LeftTicks">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^[TickPlacement=BottomRight] /template/ TickBar#RightTicks, ^[TickPlacement=Outside] /template/ TickBar#RightTicks">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaScrollArrow" TargetType="RepeatButton">
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Background" Value="{DynamicResource LunaInputFill}" />
+      <Setter Property="Foreground" Value="{DynamicResource LunaArrowInk}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="ArrowSurface" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaArrowBorder}" BorderThickness="1" CornerRadius="2" Margin="1">
+            <ContentPresenter Content="{TemplateBinding Content}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Border#ArrowSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaInputHotFill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaHotBorder}" />
+      </Style>
+      <Style Selector="^:pressed /template/ Border#ArrowSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaInputPressed}" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+    </ControlTheme>
+    <!-- 凸纹固定为 8×8 像素并居中，不随滑块长度拉伸。纵向用横纹，横向用竖纹。 -->
+    <ControlTheme x:Key="LunaScrollThumb" TargetType="Thumb">
+      <Setter Property="MinWidth" Value="17" />
+      <Setter Property="MinHeight" Value="17" />
+      <Setter Property="Background" Value="{DynamicResource LunaVerticalScrollFill}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="ThumbSurface" Margin="1" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaScrollBorder}" BorderThickness="1" CornerRadius="2">
+            <StackPanel Name="ThumbGrip" Width="8" Height="8" Spacing="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+              <Border Height="2" Background="{DynamicResource LunaGripLight}" BorderBrush="{DynamicResource LunaGripDark}" BorderThickness="0,1,0,0" />
+              <Border Height="2" Background="{DynamicResource LunaGripLight}" BorderBrush="{DynamicResource LunaGripDark}" BorderThickness="0,1,0,0" />
+              <Border Height="2" Background="{DynamicResource LunaGripLight}" BorderBrush="{DynamicResource LunaGripDark}" BorderThickness="0,1,0,0" />
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Border#ThumbSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaVerticalScrollHot}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LunaScrollHotBorder}" />
+      </Style>
+      <Style Selector="^:pressed /template/ Border#ThumbSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaScrollPressed}" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaHorizontalScrollThumb" TargetType="Thumb" BasedOn="{StaticResource LunaScrollThumb}">
+      <Setter Property="Background" Value="{DynamicResource LunaHorizontalScrollFill}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="ThumbSurface" Margin="1" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource LunaScrollBorder}" BorderThickness="1" CornerRadius="2">
+            <StackPanel Name="ThumbGrip" Orientation="Horizontal" Width="8" Height="8" Spacing="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+              <Border Width="2" Background="{DynamicResource LunaGripLight}" BorderBrush="{DynamicResource LunaGripDark}" BorderThickness="1,0,0,0" />
+              <Border Width="2" Background="{DynamicResource LunaGripLight}" BorderBrush="{DynamicResource LunaGripDark}" BorderThickness="1,0,0,0" />
+              <Border Width="2" Background="{DynamicResource LunaGripLight}" BorderBrush="{DynamicResource LunaGripDark}" BorderThickness="1,0,0,0" />
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Border#ThumbSurface">
+        <Setter Property="Background" Value="{DynamicResource LunaInputHotFill}" />
+      </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="LunaScrollBar" TargetType="ScrollBar">
+      <Setter Property="AllowAutoHide" Value="False" />
+      <Setter Property="Background" Value="{DynamicResource LunaScrollTrack}" />
+      <Style Selector="^:vertical">
+        <Setter Property="Width" Value="17" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid Background="{TemplateBinding Background}" RowDefinitions="17,*,17">
+              <RepeatButton Name="PART_LineUpButton" Theme="{StaticResource LunaScrollArrow}" AutomationProperties.Name="向上滚动">
+                <Path Data="M 0,4 L 4,0 L 8,4 Z" Fill="{DynamicResource LunaArrowInk}" />
+              </RepeatButton>
+              <Track Grid.Row="1" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value, Mode=TwoWay}" ViewportSize="{TemplateBinding ViewportSize}" DeferThumbDrag="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" Orientation="Vertical" IsDirectionReversed="True">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton" Theme="{StaticResource LunaTrackButton}" AutomationProperties.Name="上一页" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton" Theme="{StaticResource LunaTrackButton}" AutomationProperties.Name="下一页" />
+                </Track.IncreaseButton>
+                <Thumb Theme="{StaticResource LunaScrollThumb}" />
+              </Track>
+              <RepeatButton Name="PART_LineDownButton" Grid.Row="2" Theme="{StaticResource LunaScrollArrow}" AutomationProperties.Name="向下滚动">
+                <Path Data="M 0,0 L 8,0 L 4,4 Z" Fill="{DynamicResource LunaArrowInk}" />
+              </RepeatButton>
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+      </Style>
+      <Style Selector="^:horizontal">
+        <Setter Property="Height" Value="17" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid Background="{TemplateBinding Background}" ColumnDefinitions="17,*,17">
+              <RepeatButton Name="PART_LineUpButton" Theme="{StaticResource LunaScrollArrow}" AutomationProperties.Name="向左滚动">
+                <Path Data="M 4,0 L 0,4 L 4,8 Z" Fill="{DynamicResource LunaArrowInk}" />
+              </RepeatButton>
+              <Track Grid.Column="1" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value, Mode=TwoWay}" ViewportSize="{TemplateBinding ViewportSize}" DeferThumbDrag="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" Orientation="Horizontal">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton" Theme="{StaticResource LunaTrackButton}" AutomationProperties.Name="向左翻页" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton" Theme="{StaticResource LunaTrackButton}" AutomationProperties.Name="向右翻页" />
+                </Track.IncreaseButton>
+                <Thumb Theme="{StaticResource LunaHorizontalScrollThumb}" />
+              </Track>
+              <RepeatButton Name="PART_LineDownButton" Grid.Column="2" Theme="{StaticResource LunaScrollArrow}" AutomationProperties.Name="向右滚动">
+                <Path Data="M 0,0 L 4,4 L 0,8 Z" Fill="{DynamicResource LunaArrowInk}" />
+              </RepeatButton>
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+      </Style>
+      <Style Selector="^:focus-visible">
+        <Setter Property="Background" Value="{DynamicResource LunaScrollFocus}" />
+      </Style>
+    </ControlTheme>
+  </Styles.Resources>
+  <Style Selector="ComboBox">
+    <Setter Property="Theme" Value="{StaticResource LunaComboBox}" />
+  </Style>
+  <Style Selector="ComboBoxItem">
+    <Setter Property="Theme" Value="{StaticResource LunaComboBoxItem}" />
+  </Style>
+  <Style Selector="Slider">
+    <Setter Property="Theme" Value="{StaticResource LunaSlider}" />
+  </Style>
+  <Style Selector="ScrollBar">
+    <Setter Property="Theme" Value="{StaticResource LunaScrollBar}" />
+  </Style>
+  <!-- Luna 滚动条占据独立空间，不能沿用 Fluent 自动隐藏时的覆盖式布局。 -->
+  <Style Selector="ScrollViewer">
+    <Setter Property="AllowAutoHide" Value="False" />
+  </Style>
+</Styles>

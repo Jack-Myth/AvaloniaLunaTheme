@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Luna.Showcase.MainWindow" Title="Luna · Windows XP 蓝色主题" Width="820" Height="610" MinWidth="680" MinHeight="540" WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,*,Auto" Margin="14,12,14,12">
+    <Grid ColumnDefinitions="*,184" ColumnSpacing="12" Margin="4,0,0,16">
+      <StackPanel>
+        <TextBlock Text="熟悉的蓝色，新的 Avalonia。" FontSize="23" Foreground="{DynamicResource LunaHeading}" Name="ThemeHeadline" />
+        <TextBlock Text="Luna Blue / 交互式控件展示" Foreground="{DynamicResource LunaMutedText}" Margin="0,5,0,0" Name="ThemeSubtitle" />
+      </StackPanel>
+      <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
+        <TextBlock Text="Luna 配色" FontSize="12" Foreground="{DynamicResource LunaMutedText}" />
+        <ComboBox Name="ThemeSelector" SelectedIndex="0" HorizontalAlignment="Stretch">
+          <ComboBoxItem Content="蓝色 Blue" />
+          <ComboBoxItem Content="银色 Silver" />
+          <ComboBoxItem Content="橄榄绿 Olive Green" />
+        </ComboBox>
+      </StackPanel>
+    </Grid>
+    <TabControl Grid.Row="1" Name="Pages">
+      <TabItem Header="常用控件">
+        <ScrollViewer Name="CommonScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+          <Grid ColumnDefinitions="*,*" Margin="18" ColumnSpacing="24">
+            <StackPanel Spacing="10">
+              <TextBlock Text="输入与选择" FontWeight="Bold" Foreground="{DynamicResource LunaHeading}" />
+              <TextBlock Text="您的名字" />
+              <TextBox Name="NameInput" Text="Luna 使用者" PlaceholderText="请输入名字" />
+              <TextBlock Text="桌面配色" />
+              <ComboBox Name="ColorChoice" SelectedIndex="{Binding #ThemeSelector.SelectedIndex, Mode=TwoWay}" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="经典蓝色 Luna" />
+                <ComboBoxItem Content="银色 Silver" />
+                <ComboBoxItem Content="橄榄绿 Olive Green" />
+              </ComboBox>
+              <CheckBox Name="Sounds" IsChecked="True" Content="启用提示音" />
+              <CheckBox Content="显示桌面提示" />
+              <CheckBox Content="禁用选项" IsEnabled="False" />
+              <StackPanel Orientation="Horizontal" Spacing="18">
+                <RadioButton GroupName="Mode" IsChecked="True" Content="标准模式" />
+                <RadioButton GroupName="Mode" Content="紧凑模式" />
+              </StackPanel>
+              <TextBox Text="这是一个只读文本框" IsReadOnly="True" />
+              <TextBox Text="不可用的输入框" IsEnabled="False" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="13">
+              <TextBlock Text="按钮与进度" FontWeight="Bold" Foreground="{DynamicResource LunaHeading}" />
+              <WrapPanel>
+                <Button Name="ApplyButton" Content="应用 (_A)" Margin="0,0,8,8" />
+                <Button Name="ResetButton" Content="重置 (_R)" Margin="0,0,8,8" />
+                <Button Content="不可用" IsEnabled="False" />
+              </WrapPanel>
+              <TextBlock Text="拖动滑块调整进度" />
+              <Slider Name="Level" Minimum="0" Maximum="100" Value="62" TickFrequency="10" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+              <ProgressBar Name="Progress" Value="{Binding #Level.Value}" Maximum="100" />
+              <TextBlock Name="LevelLabel" Text="{Binding #Level.Value, StringFormat='完成进度：{0:0}%'}" />
+              <Border BorderBrush="{DynamicResource LunaSeparator}" BorderThickness="1" Padding="12" Background="{DynamicResource LunaInsetSurface}">
+                <TextBlock Text="试试 Tab / Shift+Tab、空格、方向键。&#xA;按钮可点击，文本可编辑，选项可切换。" TextWrapping="Wrap" />
+              </Border>
+              <TextBlock Name="Result" Text="准备就绪。" TextWrapping="Wrap" Foreground="#3B6832" />
+            </StackPanel>
+          </Grid>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="列表与滚动">
+        <Grid Margin="18" RowDefinitions="Auto,*" ColumnDefinitions="*,224" ColumnSpacing="16">
+          <TextBlock Text="这是实际的可选择列表：使用方向键或滚轮浏览。" TextWrapping="Wrap" Margin="0,0,0,8" />
+          <ListBox Name="DemoList" Grid.Row="1" Background="White" BorderBrush="{DynamicResource LunaInputBorder}" BorderThickness="1" SelectedIndex="0" />
+          <ScrollViewer Name="InputsScroll" Grid.Column="1" Grid.RowSpan="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="8" Margin="0,0,0,4">
+              <TextBlock Text="更多输入状态" FontWeight="Bold" Foreground="{DynamicResource LunaHeading}" />
+              <ComboBox Name="EditableChoice" IsEditable="True" Text="可编辑输入" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="第一项" />
+                <ComboBoxItem Content="第二项" />
+              </ComboBox>
+              <ComboBox SelectedIndex="0" IsEnabled="False" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="禁用的组合框" />
+              </ComboBox>
+              <StackPanel Name="VerticalSliderGroup" Spacing="4">
+                <TextBlock Text="垂直滑块" />
+                <Grid ColumnDefinitions="34,*" ColumnSpacing="10">
+                  <Slider Name="VerticalLevel" Orientation="Vertical" Height="84" Minimum="0" Maximum="100" Value="40" TickFrequency="20" TickPlacement="BottomRight" />
+                  <TextBlock Grid.Column="1" Text="上下拖动调整数值" FontSize="12" Foreground="{DynamicResource LunaMutedText}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                </Grid>
+              </StackPanel>
+              <StackPanel Name="DisabledSliderGroup" Spacing="4">
+                <TextBlock Text="禁用的滑块" />
+                <Slider Value="50" IsEnabled="False" />
+              </StackPanel>
+              <StackPanel Name="HorizontalScrollGroup" Spacing="4">
+                <TextBlock Text="水平滚动" />
+                <ScrollViewer Name="WideScroll" Height="50" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
+                  <TextBlock Width="700" Text="Luna 滚动条演示：横向箭头、翻页区域与可拖动的滑块。" Padding="6" Background="White" />
+                </ScrollViewer>
+              </StackPanel>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </TabItem>
+      <TabItem Header="菜单与导航">
+        <Grid RowDefinitions="Auto,*" Background="{DynamicResource LunaSurface}">
+          <Menu Name="DesktopMenu">
+            <MenuItem Name="FileMenu" Header="文件 (_F)">
+              <MenuItem Name="MenuRename" Header="重命名 (_R)" InputGesture="Ctrl+R" HotKey="Ctrl+R" />
+              <Separator />
+              <MenuItem Header="导出 (_E)" IsEnabled="False" />
+              <MenuItem Name="MenuClose" Header="关闭 (_C)" />
+            </MenuItem>
+            <MenuItem Name="ViewMenu" Header="查看 (_V)">
+              <MenuItem Name="MenuDetails" Header="显示说明 (_D)" ToggleType="CheckBox" IsChecked="True" />
+              <MenuItem Name="NavigationMenu" Header="目录操作 (_N)">
+                <MenuItem Name="MenuExpand" Header="展开全部 (_E)" />
+                <MenuItem Name="MenuCollapse" Header="折叠全部 (_C)" />
+              </MenuItem>
+            </MenuItem>
+            <MenuItem Name="HelpMenu" Header="帮助 (_H)">
+              <MenuItem Name="MenuHelp" Header="使用说明 (_H)" />
+            </MenuItem>
+          </Menu>
+          <Grid Grid.Row="1" Margin="16" ColumnDefinitions="*,260" ColumnSpacing="18">
+            <Grid RowDefinitions="Auto,*" RowSpacing="8">
+              <TextBlock Text="工作区" Foreground="{DynamicResource LunaHeading}" FontWeight="Bold" />
+              <TreeView Name="DesktopTree" Grid.Row="1">
+                <TreeView.ContextMenu>
+                  <ContextMenu Name="TreeContext">
+                    <MenuItem Name="ContextRename" Header="重命名 (_R)" />
+                    <Separator />
+                    <MenuItem Name="ContextExpand" Header="展开当前目录 (_E)" />
+                    <MenuItem Name="ContextCollapse" Header="折叠当前目录 (_C)" />
+                    <MenuItem Header="删除（只读示例）" IsEnabled="False" />
+                  </ContextMenu>
+                </TreeView.ContextMenu>
+                <TreeViewItem Name="WorkspaceNode" Header="我的工作区" IsExpanded="True">
+                  <TreeViewItem Name="DocumentsNode" Header="文档" IsExpanded="True">
+                    <TreeViewItem Name="PlanNode" Header="项目方案" IsSelected="True" />
+                    <TreeViewItem Name="NotesNode" Header="会议记录" />
+                  </TreeViewItem>
+                  <TreeViewItem Name="ArchiveNode" Header="归档">
+                    <TreeViewItem Header="去年项目" />
+                    <TreeViewItem Header="参考资料" />
+                  </TreeViewItem>
+                  <TreeViewItem Name="LockedNode" Header="系统文件（不可用）" IsEnabled="False" />
+                </TreeViewItem>
+              </TreeView>
+            </Grid>
+            <Grid Grid.Column="1" RowDefinitions="*,Auto">
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="14">
+                  <GroupBox Name="PropertiesGroup" Header="项目属性">
+                    <StackPanel Spacing="8">
+                      <TextBlock Text="名称" />
+                      <TextBox Name="RenameInput" Text="项目方案" />
+                      <Button Name="RenameButton" Content="重命名 (_R)" HorizontalAlignment="Left" ToolTip.Tip="修改左侧选中节点的名称；也可用 Ctrl+R 聚焦名称输入框。" ToolTip.Placement="Bottom" />
+                      <CheckBox Name="DetailsToggle" Content="显示说明" IsChecked="{Binding #MenuDetails.IsChecked, Mode=TwoWay}" />
+                    </StackPanel>
+                  </GroupBox>
+                  <GroupBox Header="操作提示">
+                    <StackPanel Spacing="8">
+                      <TextBlock Name="NavigationDetails" Text="选择左侧项目查看名称。加减号展开或折叠目录，右键打开菜单。&#xA;支持方向键、菜单快捷键及 Esc 关闭菜单。" TextWrapping="Wrap" IsVisible="{Binding #MenuDetails.IsChecked}" />
+                      <Button Name="TipButton" Content="如何操作" HorizontalAlignment="Left" ToolTip.Placement="Bottom">
+                        <ToolTip.Tip>
+                          <ToolTip>方向键浏览树；右键或 Shift+F10 打开菜单。菜单中的灰色条目不可用。</ToolTip>
+                        </ToolTip.Tip>
+                      </Button>
+                    </StackPanel>
+                  </GroupBox>
+                </StackPanel>
+              </ScrollViewer>
+              <TextBlock Name="DesktopStatus" Text="已选择：项目方案" TextWrapping="Wrap" Foreground="#3B6832" Grid.Row="1" Margin="0,8,0,0" />
+            </Grid>
+          </Grid>
+        </Grid>
+      </TabItem>
+      <TabItem Header="关于">
+        <StackPanel Margin="24" Spacing="12">
+          <TextBlock Text="Avalonia.Luna" FontSize="22" Foreground="{DynamicResource LunaHeading}" />
+          <TextBlock Text="独立的主题库 + 简洁的展示应用。" />
+          <TextBlock Text="使用原创 XAML 渐变与矢量形状重现 XP Luna 蓝色风格。&#xA;窗口使用 Avalonia 12 框架装饰，保持系统窗口交互。&#xA;第一版并非 Windows XP 像素级复刻，未覆盖控件以 Fluent 为基础。" TextWrapping="Wrap" />
+        </StackPanel>
+      </TabItem>
+    </TabControl>
+    <Border Grid.Row="2" BorderBrush="{DynamicResource LunaDivider}" BorderThickness="0,1,0,0" Margin="0,12,0,0" Padding="5,8,0,0">
+      <TextBlock Text="Luna Blue  ·  Avalonia 12  ·  原生桌面交互" FontSize="12" Foreground="{DynamicResource LunaMutedText}" Name="ThemeFooter" />
+    </Border>
+  </Grid>
+</Window>

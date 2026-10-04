@@ -1,0 +1,41 @@
+# Local verification, caches, previews and runnable builds
+.work/
+bin/
+obj/
+publish/
+artifacts/
+TestResults/
+*.nupkg
+*.snupkg
+
+# IDE and per-user configuration
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Temporary files, logs and operating-system metadata
+*.log
+*.tmp
+*.bak
+*.pid
+*.dmp
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+.secrets/
+.aws/
+.ssh/
+credentials.json
+*.pfx
+*.p12
+*.pem
+*.key
